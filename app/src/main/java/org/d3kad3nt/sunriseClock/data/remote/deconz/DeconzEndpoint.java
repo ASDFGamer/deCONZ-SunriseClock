@@ -12,10 +12,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 
 import org.d3kad3nt.sunriseClock.data.model.endpoint.BaseEndpoint;
+import org.d3kad3nt.sunriseClock.data.model.light.BaseLight;
+import org.d3kad3nt.sunriseClock.data.remote.common.ApiResponse;
 import org.d3kad3nt.sunriseClock.data.remote.deconz.typeadapter.BaseLightListTypeAdapter;
 import org.d3kad3nt.sunriseClock.data.remote.deconz.typeadapter.BaseLightTypeAdapter;
-import org.d3kad3nt.sunriseClock.data.remote.common.ApiResponse;
-import org.d3kad3nt.sunriseClock.data.model.light.BaseLight;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -144,7 +144,7 @@ public class DeconzEndpoint extends BaseEndpoint {
     }
 
     @Override
-    public LiveData<ApiResponse<BaseLight>> getLight(String id) {
+    public LiveData<ApiResponse<BaseLight>> getLight(String id){
         Log.d(TAG, "Requesting single light with id " + id + " from endpoint: " + this.baseUrl);
 
         // Workaround: Deconz endpoint does not return the id of a light when requesting a single
@@ -152,6 +152,11 @@ public class DeconzEndpoint extends BaseEndpoint {
         // the original request. A okHttp interceptor is used to modify the JSON response from the
         // Deconz endpoint and adds this light id.
         return this.retrofit.getLight(id, id);
+    }
+
+    @Override
+    public void updateLight(BaseLight light){
+        this.retrofit.updateLight(light.getEndpointLightId(), light, light.getEndpointLightId());
     }
 
 }

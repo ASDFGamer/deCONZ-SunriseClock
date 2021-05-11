@@ -9,6 +9,8 @@ import androidx.room.Index;
 
 import org.d3kad3nt.sunriseClock.data.model.endpoint.EndpointConfig;
 
+import java.util.Objects;
+
 
 @Entity(tableName = BaseLight.TABLENAME,
         indices = {@Index("endpointId")},
@@ -85,22 +87,48 @@ public class BaseLight implements Light{
     }
 
     @Ignore
-    public BaseLight(long endpointId, @NonNull String endpointLightId) {
+    public BaseLight(long endpointId, @NonNull String endpointLightId){
         this.endpointId = endpointId;
         this.endpointLightId = endpointLightId;
     }
 
     @Ignore
-    public BaseLight(long endpointId) {
+    public BaseLight(long endpointId){
         this.endpointId = endpointId;
     }
 
+    /**
+     * Copy constructor
+     *
+     * @param copy another BaseLight instance
+     */
+    public BaseLight(BaseLight copy){
+        this.endpointId = copy.endpointId;
+        this.endpointLightId = copy.endpointLightId;
+
+        this.friendlyName = copy.friendlyName;
+
+        this.switchable = copy.switchable;
+        this.on = copy.on;
+
+        this.dimmable = copy.dimmable;
+        this.brightness = copy.brightness;
+
+        this.temperaturable = copy.temperaturable;
+        this.colorTemperature = copy.colorTemperature;
+
+        this.colorable = copy.colorable;
+        this.color = copy.color;
+
+        this.lightID = copy.lightID;
+    }
+
     @NonNull
-    public String getEndpointLightId() {
+    public String getEndpointLightId(){
         return endpointLightId;
     }
 
-    public void setEndpointLightId(@NonNull String endpointLightId) {
+    public void setEndpointLightId(@NonNull String endpointLightId){
         this.endpointLightId = endpointLightId;
     }
 
@@ -164,7 +192,7 @@ public class BaseLight implements Light{
         return this.endpointId;
     }
 
-    public void setEndpointId(long endpointId) {
+    public void setEndpointId(long endpointId){
         this.endpointId = endpointId;
     }
 
@@ -175,4 +203,16 @@ public class BaseLight implements Light{
         return lightID;
     }
 
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseLight baseLight = (BaseLight) o;
+        return getUUID().equals(baseLight.getUUID());
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(getUUID());
+    }
 }

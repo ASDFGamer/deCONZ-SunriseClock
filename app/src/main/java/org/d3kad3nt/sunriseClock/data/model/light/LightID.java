@@ -11,7 +11,7 @@ public class LightID implements Serializable {
 
     private final String endpointLightID;
 
-    protected LightID(long endpointID, String endpointLightID){
+    public LightID(long endpointID, String endpointLightID){
         this.endpointID = endpointID;
         this.endpointLightID = endpointLightID;
     }
