@@ -117,7 +117,7 @@ public class LightRepository {
     public LiveData<Resource<BaseLight>> getLight(long endpointId, String endpointLightId){
         LightID lightID = new LightID(endpointId, endpointLightId);
         if (!lightCache.containsKey(lightID)){
-            NetworkBoundResource<BaseLight, BaseLight> networkBoundResource = new BaseLightNetworkBoundResource(
+            NetworkBoundResource<BaseLight, BaseLight> networkBoundResource = BaseLightNetworkBoundResource.getInstance(
                     endpointRepo.getEndpoint(endpointId),
                     endpointId,
                     baseLightDao,
@@ -141,7 +141,7 @@ public class LightRepository {
                 endpointRepo.getEndpoint(light.getEndpointId()),
                 baseEndpoint -> {
                     baseEndpoint.updateLight(light);
-                    NetworkBoundResource<BaseLight, BaseLight> networkBoundResource = new BaseLightNetworkBoundResource(
+                    NetworkBoundResource<BaseLight, BaseLight> networkBoundResource = BaseLightNetworkBoundResource.getInstance(
                             endpointRepo.getEndpoint(light.getEndpointId()),
                             light.getEndpointId(),
                             baseLightDao,
