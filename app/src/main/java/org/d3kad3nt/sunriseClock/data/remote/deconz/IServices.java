@@ -28,5 +28,5 @@ public interface IServices{
 
     //TODO return response as something like LiveData<ApiResponse<List<Change>>>
     @PUT("lights/{lightId}/state")
-    void updateLight(@Path("lightID") String lightID, @Body BaseLight light, @Header(endpointLightIdHeader) String headerLightId);
+    LiveData<ApiResponse<Void>> updateLight(@Path("lightId") String lightID, @Body BaseLight light, @Header(endpointLightIdHeader) String headerLightId);
 }
