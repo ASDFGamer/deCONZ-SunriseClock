@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -85,8 +86,7 @@ public class DeconzEndpoint extends BaseEndpoint {
                     public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
                         Request request = chain.request();
                         okhttp3.Response response = chain.proceed(request);
-                        Log.d(TAG, "HTTP interceptor: Intercepted request to: " + response.request().url().toString() + " led to HTTP code: " + response.code());
-
+                        Log.d(TAG, "HTTP interceptor: Intercepted " + request.method() + " request to: " + response.request().url().toString() + " led to HTTP code: " + response.code());
                         if (response.code() >= 200 && response.code() <= 399 && response.body() != null) {
 
                             // Workaround: Deconz endpoint does not return the id of a light when requesting a single
@@ -156,7 +156,14 @@ public class DeconzEndpoint extends BaseEndpoint {
 
     @Override
     public void updateLight(BaseLight light){
-        this.retrofit.updateLight(light.getEndpointLightId(), light, light.getEndpointLightId());
+        LiveData<ApiResponse<ResponseBody>> response = this.retrofit.updateLight(light.getEndpointLightId(), light, light.getEndpointLightId());
+        response.observeForever(new Observer<ApiResponse<ResponseBody>>(){
+            @Override
+            public void onChanged(ApiResponse<ResponseBody> voidApiResponse){
+                Log.d(TAG, voidApiResponse.toString());
+                response.removeObserver(this);
+            }
+        });
     }
 
 }

@@ -7,11 +7,13 @@ import org.d3kad3nt.sunriseClock.data.remote.common.ApiResponse;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+
 
 /**
  * Defines all relevant deconz API endpoint addresses for usage with the retrofit library.
@@ -28,5 +30,5 @@ public interface IServices{
 
     //TODO return response as something like LiveData<ApiResponse<List<Change>>>
     @PUT("lights/{lightId}/state")
-    LiveData<ApiResponse<Void>> updateLight(@Path("lightId") String lightID, @Body BaseLight light, @Header(endpointLightIdHeader) String headerLightId);
+    LiveData<ApiResponse<ResponseBody>> updateLight(@Path("lightId") String lightID, @Body BaseLight light, @Header(endpointLightIdHeader) String headerLightId);
 }
