@@ -118,4 +118,24 @@ abstract class NetworkBoundResource<ResultType, RequestType>
 
     @MainThread
     protected abstract fun createCall(): LiveData<ApiResponse<RequestType>>
+
+    fun asResultLiveData(): LiveData<ResourceStatus> {
+        val resourceStatus = MediatorLiveData<ResourceStatus>()
+        resourceStatus.addSource(result) { resource ->
+            val newResourceStatus: ResourceStatus = when (resource.status) {
+                Status.SUCCESS -> {
+                    Resource.success(null)
+                }
+                Status.ERROR -> {
+                    Resource.error(resource.message!!, null)
+                }
+                Status.LOADING -> {
+                    Resource.loading(null)
+                }
+            }
+            resourceStatus.setValue(newResourceStatus)
+        }
+        return resourceStatus
+    }
+
 }

@@ -40,3 +40,5 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
     }
 
 }
+
+typealias ResourceStatus = Resource<Void>
